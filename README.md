@@ -30,7 +30,7 @@ You can tweak values in the application config file 'app.csv' in the folder 'Gol
 Native packaged versions do not need Java as a JRE is automatically included
 
 ## Known issues
-* Spinner UI components do not automatically update on key type
+* Spinner UI components do not automatically update on key type(hit enter to set a number)
 * Spinner exception is thrown if a user attempts to enter a non numeric number
 * Application attribute update thread will crash if the computer goes to sleep while running
 * Attribute updating is CPU intensive.
