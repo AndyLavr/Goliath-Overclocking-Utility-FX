@@ -13,8 +13,8 @@ The Goliath Overclocking utility uses custom made Java classes which utilize the
 
 This application creates an app folder in your home folder in order to store app settings, GPU info, and fan profiles.
 
-The classes can be found here: https://github.com/BlueGoliath/GoliathOCBackend
-The Terminal class can be found here: https://github.com/BlueGoliath/Goliath-Terminal
+The classes can be found here: `https://github.com/BlueGoliath/GoliathOCBackend`
+The Terminal class can be found here: `https://github.com/BlueGoliath/Goliath-Terminal`
 ---
 ## Requirements
 * Nvidia binary GPU driver
