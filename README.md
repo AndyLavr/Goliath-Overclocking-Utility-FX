@@ -18,7 +18,7 @@ The classes can be found [here](https://github.com/BlueGoliath/GoliathOCBackend)
 
 ## Tweaks
 
-You can tweak values in the application folder in your home folder after first use. Currently only `show_extra_attribute_data` is in use which displays raw command line attributes and values as they show in the command line.
+You can tweak values in the application config file 'app.csv' in the folder 'GoliathOU' in your home folder after first use. Currently only `show_extra_attribute_data` is in use which displays raw command line attributes and values as they show in the command line.
 
 ## Requirements
 
