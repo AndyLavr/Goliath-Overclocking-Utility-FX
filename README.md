@@ -10,9 +10,7 @@ Linux Nvidia GPU overclocking utility written in JavaFX - currently pre-alpha
 ---
 ## How it works
 The Goliath Overclocking utility uses custom made Java classes which utilize the Goliath Terminal class by pushing(settings) and pulling(getting) Nvidia Settings attributes.
-
 This application creates an app folder in your home folder in order to store app settings, GPU info, and fan profiles.
-
 The classes can be found here: `https://github.com/BlueGoliath/GoliathOCBackend`
 The Terminal class can be found here: `https://github.com/BlueGoliath/Goliath-Terminal`
 ---
@@ -21,7 +19,6 @@ The Terminal class can be found here: `https://github.com/BlueGoliath/Goliath-Te
 * Nvidia Settings CLI - may come with the Nvidia binary GPU driver depending on the distrobution you use
 * X. Org config file with `cooltbits` set to `31` or some other value that allows Nvidia-Settings CLI access
 * Java 8*
-
 *Native packaged versions do not need Java as a JRE is automatically included*
 ---
 ## Known issues
