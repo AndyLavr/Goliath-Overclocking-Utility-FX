@@ -1,0 +1,8 @@
+.tab *.tab-label
+{
+    -fx-border-radius: 0 0 0 0;
+};
+.tab
+{
+    -fx-padding: 3em 0.5em 3em 0.5em;
+}
