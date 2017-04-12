@@ -2,7 +2,7 @@
 Linux Nvidia GPU overclocking utility written in JavaFX - currently pre-alpha
 ---
 ## Download
-You can download releases from [the download page](https://github.com/BlueGoliath/Goliath-Overclocking-Utility-FX/releases)
+You can download releases from the [releases page](https://github.com/BlueGoliath/Goliath-Overclocking-Utility-FX/releases) .
 ## Features(currently)
 * Easily get supported Nvidia Settings CLI Attribute readouts
 * Change PowerMizer mode
