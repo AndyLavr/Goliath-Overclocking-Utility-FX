@@ -54,10 +54,8 @@ public class InformationPane extends Pane
         
         infoTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-        infoTable.setMinWidth(750);
-        infoTable.setMaxWidth(750);
-        infoTable.setMinHeight(275);
-        infoTable.setMaxHeight(275);
+        infoTable.setPrefWidth(750);
+        infoTable.setPrefHeight(285);
         infoTable.setEditable(false);
         
         super.getChildren().add(infoTable);

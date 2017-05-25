@@ -5,7 +5,8 @@
  */
 package goliathoufx.panes.performance;
 
-import goliath.ou.api.GPUController;
+import goliath.ou.interfaces.GPUController;
+import goliathoufx.panes.AppTabPane;
 import goliathoufx.panes.performance.overclocking.CoreOffsetPane;
 import goliathoufx.panes.performance.overclocking.MemoryOffsetPane;
 import goliathoufx.panes.performance.overclocking.PowerLimitPane;
@@ -26,7 +27,7 @@ public class OverclockingTabPane extends TabPane
     private final VoltageOffsetPane voltagePane;
     private final PowerLimitPane powerPane;
     
-    public OverclockingTabPane(GPUController[] controllers)
+    public OverclockingTabPane(GPUController<Integer>[] controllers, AppTabPane pane)
     {
         super();
         
@@ -37,7 +38,7 @@ public class OverclockingTabPane extends TabPane
         corePane = new CoreOffsetPane(controllers[0]);
         memoryPane = new MemoryOffsetPane(controllers[1]);
         voltagePane = new VoltageOffsetPane(controllers[2]);
-        powerPane = new PowerLimitPane(controllers[3]);
+        powerPane = new PowerLimitPane(controllers[3], pane);
         
         tabs = new Tab[4];
         

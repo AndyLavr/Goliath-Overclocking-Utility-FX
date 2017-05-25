@@ -5,12 +5,13 @@
  */
 package goliathoufx.panes;
 
-import goliath.ou.api.GPUController;
+import goliath.ou.interfaces.GPUController;
 import goliath.ou.attribute.Attribute;
-import goliath.ou.controller.CoreController;
-import goliath.ou.controller.MemoryController;
-import goliath.ou.controller.PowerController;
-import goliath.ou.controller.VoltageController;
+import goliath.ou.controller.CoreOffsetController;
+import goliath.ou.controller.MemoryOffsetController;
+import goliath.ou.controller.PowerLimitController;
+import goliath.ou.controller.PowerMizerController;
+import goliath.ou.controller.VoltageOffsetController;
 import goliath.ou.performance.PerformanceLevel;
 import goliathoufx.panes.performance.OverclockingTabPane;
 import goliathoufx.panes.performance.PowerMizerPane;
@@ -33,47 +34,47 @@ public class PerformancePane extends BorderPane
     private final ArrayList<PerformanceLevel> perfLevels;
     private final GPUController[] controllers;
     private GPUController<Integer> core, memory, voltage;
-    private PowerController power;
+    private PowerLimitController power;
+    private PowerMizerController powerMizer;
 
-    public PerformancePane(ArrayList<PerformanceLevel> perfLevelList, ArrayList<Attribute> attributes, AppTabPane pane)
+    public PerformancePane(ArrayList<PerformanceLevel> perfLevelList, ArrayList<Attribute> attributes, AppTabPane pane, Attribute[] requiredAttrs)
     {
         super();
         controllers = new GPUController[4];
         perfLevels = perfLevelList;
 
+        core = new CoreOffsetController(requiredAttrs[0]);
+        memory = new MemoryOffsetController(requiredAttrs[1]);
+        
         for(int i = 0; i < attributes.size(); i++)
         {
-            switch(attributes.get(i).displayNameProperty().getValue())
-            {
-                case "Graphics Clock Offset":
-                    core = new CoreController(attributes.get(i));
+            switch(attributes.get(i).cmdNameProperty().getValue())
+            {   
+                case "GPUOverVoltageOffset":
+                    voltage = new VoltageOffsetController(attributes.get(i));
                     break;
                     
-                case "Voltage Offset":
-                    voltage = new VoltageController(attributes.get(i));
+                case "GPUPowerMizerMode":
+                    powerMizer = new PowerMizerController(attributes.get(i));
                     break;
-                    
-                case "Memory Transfer Rate Offset":
-                    memory = new MemoryController(attributes.get(i));
-                    break;   
             }
         }
-        power = new PowerController();
+        power = new PowerLimitController();
         
         controllers[0] = core;
         controllers[1] = memory;
         controllers[2] = voltage;
         controllers[3] = power;
         
-        overclockingTabPane = new OverclockingTabPane(controllers);
+        overclockingTabPane = new OverclockingTabPane(controllers, pane);
         
-        apply = new Button("Apply");
+        apply = new Button("Apply All");
         apply.setMinWidth(100);
-        apply.setMinHeight(52);
+        apply.setMinHeight(57);
 
-        cancel = new Button("Reset");
+        cancel = new Button("Reset All");
         cancel.setMinWidth(100);
-        cancel.setMaxHeight(51);
+        cancel.setMaxHeight(56);
 
         buttonPane = new BorderPane();
         buttonPane.topProperty().set(apply);
@@ -86,10 +87,10 @@ public class PerformancePane extends BorderPane
         apply.setOnMouseClicked(new ApplyButtonHandler(pane));
         cancel.setOnMouseClicked(new cancelButtonHandler());
 
-        super.topProperty().set(new PowerMizerPane(perfLevels));
+        super.topProperty().set(new PowerMizerPane(perfLevels, powerMizer));
         super.centerProperty().set(overclockingPane);
     }
-    public void applyOC(CharSequence password)
+    public void applyOCAll(CharSequence password)
     {
             core.setValue(overclockingTabPane.getCoreSpinner().getValue());
             memory.setValue(overclockingTabPane.getMemorySpinner().getValue());
@@ -98,12 +99,19 @@ public class PerformancePane extends BorderPane
             power.setPassword(password);
             power.setValue(overclockingTabPane.getPowerSpinner().getValue());
             
-            ConsolePane.addText("\nApplying Overclocks...");
+            ConsolePane.addText("\nApplying all Overclocks...");
             ConsolePane.addText(core.getOutput());
             ConsolePane.addText(memory.getOutput());
             ConsolePane.addText(voltage.getOutput()); 
             ConsolePane.addText(power.getOutput());
-            ConsolePane.addText("\nOverclocks Applied!");
+            ConsolePane.addText("\nOverclocks Applied.");
+    }
+    public void applyPowerLimit(CharSequence password)
+    {            
+            power.setPassword(password);
+            power.setValue(overclockingTabPane.getPowerSpinner().getValue());
+            
+            ConsolePane.addText(power.getOutput());
     }
     private class ApplyButtonHandler implements EventHandler
     {
@@ -128,7 +136,13 @@ public class PerformancePane extends BorderPane
         {
             core.setValue(0);
             memory.setValue(0);
-            voltage.setValue(0); 
+            voltage.setValue(0);
+            
+            ConsolePane.addText("\nResetting Overclocks...");
+            ConsolePane.addText(core.getOutput());
+            ConsolePane.addText(memory.getOutput());
+            ConsolePane.addText(voltage.getOutput()); 
+            ConsolePane.addText("\nOverclocks reset. Power Limit must be reset manually.");
         }
     }
 }

@@ -5,26 +5,25 @@
  */
 package goliathoufx.panes.performance.overclocking;
 
-import goliath.ou.api.GPUController;
+import goliath.ou.interfaces.GPUController;
 
-
-/**
- *
- * @author ty
- */
 public class CoreOffsetPane extends OverclockingPaneTemplate
 {
     public CoreOffsetPane(GPUController<Integer> core)
     {
-        super();
-
+        super(true);
+        
         super.setSpinnerModel(core.getMinValue(), core.getMaxVelue(), 0);
         super.setCurrentValueLabel("New Offset Value:");
         super.setMinValueLabel("Minimum Value:");
         super.setMaxValueLabel("Maximum Value:");
-        super.setCurrentSpinnerValue(0);
+        super.setCurrentSpinnerValue(core.getCurrentValue());
         super.setCurrentMinValue(String.valueOf(core.getMinValue()));
         super.setCurrentMaxValue(String.valueOf(core.getMaxVelue()));
+        
+        super.getApplyButton().setOnMouseClicked(new ApplyHandler(super.getSpinner(), core));
+        super.getResetButton().setOnMouseClicked(new ResetHandler(core));
+        
     }
     public Integer getSpinnerValue()
     {

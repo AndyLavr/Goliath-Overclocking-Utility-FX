@@ -5,7 +5,8 @@
  */
 package goliathoufx.panes.performance.overclocking;
 
-import goliath.ou.api.GPUController;
+import goliath.ou.interfaces.GPUController;
+import javafx.scene.control.Spinner;
 
 /**
  *
@@ -13,17 +14,24 @@ import goliath.ou.api.GPUController;
  */
 public class MemoryOffsetPane extends OverclockingPaneTemplate
 {
+    private final Spinner<Integer> valueSpin;
+    
     public MemoryOffsetPane(GPUController<Integer> memory)
     {
-        super();
+        super(true);
         
         super.setSpinnerModel(memory.getMinValue(), memory.getMaxVelue(), 0);
         super.setCurrentValueLabel("New Offset Value:");
         super.setMinValueLabel("Minimum Value:");
         super.setMaxValueLabel("Maximum Value:");
-        super.setCurrentSpinnerValue(0);
+        super.setCurrentSpinnerValue(memory.getCurrentValue());
         super.setCurrentMinValue(String.valueOf(memory.getMinValue()));
         super.setCurrentMaxValue(String.valueOf(memory.getMaxVelue()));
+        
+        super.getApplyButton().setOnMouseClicked(new ApplyHandler(super.getSpinner(), memory));
+        super.getResetButton().setOnMouseClicked(new ResetHandler(memory));
+        
+        valueSpin = super.getSpinner();
     }
     public Integer getSpinnerValue()
     {

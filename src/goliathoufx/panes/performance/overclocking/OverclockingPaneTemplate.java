@@ -5,16 +5,13 @@
  */
 package goliathoufx.panes.performance.overclocking;
 
-import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.TextAlignment;
 
 /**
  *
@@ -23,10 +20,11 @@ import javafx.scene.layout.GridPane;
 public class OverclockingPaneTemplate extends GridPane
 {
     private final Label currentValueLabel, minValueLabel, maxValueLabel, currentMinValue, currentMaxValue;
+    private final Button apply;
     private final Spinner<Integer> currentValueSpinner;
-    private Integer initialValue;
+    private Button reset;
     
-    public OverclockingPaneTemplate()
+    public OverclockingPaneTemplate(boolean showReset)
     {
         super();
         super.setPadding(new Insets(10,10,10,10));
@@ -41,27 +39,42 @@ public class OverclockingPaneTemplate extends GridPane
         currentMinValue = new Label();
         currentMaxValue = new Label();
         
-        currentValueSpinner.setEditable(true);
+        apply = new Button("Apply");
+        apply.setPrefWidth(100);
         
-        currentMinValue.setAlignment(Pos.TOP_RIGHT);
-        currentMaxValue.setAlignment(Pos.TOP_RIGHT);
+        if(showReset)
+        {
+            reset = new Button("Reset");
+            reset.setPrefWidth(100);
+        }
+        
+        currentValueSpinner.setPrefWidth(125);
         
         currentValueSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(-200, 1000, 0));
         
         super.add(currentValueLabel, 0, 0);
         super.add(minValueLabel, 1, 0);
         super.add(maxValueLabel, 2, 0);
+        super.add(apply, 3, 0);
         
         super.add(currentValueSpinner, 0, 1);
         super.add(currentMinValue, 1, 1);
         super.add(currentMaxValue, 2, 1);
         
-        currentValueSpinner.setOnKeyTyped(new spinnerValidation());
-        
+        if(showReset)
+            super.add(reset, 3, 1);
     }
     public Spinner<Integer> getSpinner()
     {
         return currentValueSpinner;
+    }
+    public Button getApplyButton()
+    {
+        return apply;
+    }
+    public Button getResetButton()
+    {
+        return reset;
     }
     public void setCurrentSpinnerValue(int value)
     {
@@ -69,7 +82,6 @@ public class OverclockingPaneTemplate extends GridPane
     }
     public void setSpinnerModel(int min, int max, int defaultInt)
     {
-        initialValue = defaultInt;
         currentValueSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(min, max, defaultInt));
     }
     public void setCurrentValueLabel(String str)
@@ -91,22 +103,5 @@ public class OverclockingPaneTemplate extends GridPane
     public void setCurrentMaxValue(String str)
     {
         currentMaxValue.setText(str);
-    }
-    
-    private class spinnerValidation implements EventHandler<KeyEvent> // unused. Need to fix JavaFX's autistic spinner UI component.
-    {
-        @Override
-        public void handle(KeyEvent event)
-        {
-            try
-            {
-                Integer.parseInt(event.getCharacter());
-            }
-            catch(NumberFormatException e)
-            {
-                event.consume();
-            }
-        }
-        
     }
 }

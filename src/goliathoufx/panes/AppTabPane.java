@@ -3,7 +3,6 @@ package goliathoufx.panes;
 import goliath.ou.attribute.Attribute;
 import goliath.ou.performance.PerformanceLevel;
 import java.util.ArrayList;
-import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.control.Tab;
@@ -15,6 +14,8 @@ import javafx.scene.control.TabPane;
  */
 public class AppTabPane extends TabPane
 {   
+    public static boolean POWER_ONLY = false;
+    
     private final TabHandler handler;
     private final Tab[] tabs;
     private final PasswordPane passwordPane;
@@ -22,7 +23,7 @@ public class AppTabPane extends TabPane
     
     public static boolean BLOCK_TAB_CREATION;
     
-    public AppTabPane(ArrayList<Attribute> attributes, ArrayList<PerformanceLevel> perfLevels)
+    public AppTabPane(ArrayList<Attribute> attributes, ArrayList<PerformanceLevel> perfLevels, Attribute[] attrs)
     {
         super();
         super.setTabClosingPolicy(TabClosingPolicy.ALL_TABS);
@@ -31,7 +32,7 @@ public class AppTabPane extends TabPane
         
         BLOCK_TAB_CREATION = false;
         passwordPane = new PasswordPane(this);
-        performancePane = new PerformancePane(perfLevels, attributes, this);
+        performancePane = new PerformancePane(perfLevels, attributes, this, attrs);
         handler = new TabHandler(this);
         
         tabs = new Tab[4];
@@ -43,9 +44,9 @@ public class AppTabPane extends TabPane
         tabs[1].setContent(performancePane);
         
         tabs[2] = new Tab("Fan Control");
-        tabs[2].setContent(new FanPane());
+        tabs[2].setContent(new FanProfilePane(attrs[2], attrs[3], attrs[4]));
         
-        tabs[3] = new Tab("Console Output");
+        tabs[3] = new Tab("App Console");
         tabs[3].setContent(pane);
         
         ConsolePane.initPane(pane);
@@ -67,6 +68,16 @@ public class AppTabPane extends TabPane
         this.getTabs().add(pswPane);
         this.getSelectionModel().select(pswPane);
     }
+    public void cancelPassword()
+    {
+        BLOCK_TAB_CREATION = false;
+        this.getTabs().removeAll(this.getTabs());
+        
+        for(int i = 0; i < tabs.length; i++)
+            this.getTabs().add(tabs[i]);
+        
+        this.getSelectionModel().select(1);
+    }
     public void gotPassword()
     {
         BLOCK_TAB_CREATION = false;
@@ -77,7 +88,10 @@ public class AppTabPane extends TabPane
         
         this.getSelectionModel().select(1);
         
-        performancePane.applyOC(passwordPane.getPassword());
+        if(POWER_ONLY)
+            performancePane.applyPowerLimit(passwordPane.getPassword());
+        else
+            performancePane.applyOCAll(passwordPane.getPassword());
     }
     public Tab getInformationTab()
     {

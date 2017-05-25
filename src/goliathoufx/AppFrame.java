@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package goliathoufx;
 
 import goliath.ou.attribute.Attribute;
@@ -17,40 +12,65 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.layout.BorderPane;
 
-/**
- *
- * @author ty
- */
 public class AppFrame extends BorderPane
 {
     private final AppMenu appMenu;
     private final AttributeUpdater updater;
     private final AppTabPane tabPanel;
     private final ArrayList<PerformanceLevel> perfLevels;
+    private final ArrayList<Attribute> attrs, updateableAttrs;
     
     public AppFrame(ArrayList<Attribute> attributes)
     {
         super();
         
-        perfLevels = new PerfLevelParser().beginParse();
+        Attribute[] requiredAttrs = new Attribute[5];
         
+        updateableAttrs = new ArrayList<>();
+        
+        perfLevels = new PerfLevelParser().beginParse();
+        attrs = attributes;
+        
+        for(int i = 0; i < attrs.size(); i++)
+        {
+            if(attrs.get(i).getShouldUpdate())
+                updateableAttrs.add(attrs.get(i));
+        }
+
         // Do any setup needed for the attributes such as setting the targeted performance level(highest level) or finding specific attributes
         for(int i = 0; i < attributes.size(); i++)
         {
             switch(attributes.get(i).cmdNameProperty().getValue())
             {
                 case "GPUGraphicsClockOffset":
-                case "GPUMemoryTransferRateOffset":
+                    requiredAttrs[0] = attributes.get(i);
                     attributes.get(i).appendCmdName("[" + (perfLevels.size()-1) + "]");
+                    break;
+                    
+                case "GPUMemoryTransferRateOffset":
+                    requiredAttrs[1] = attributes.get(i);
+                    attributes.get(i).appendCmdName("[" + (perfLevels.size()-1) + "]");
+                    break;
+                    
+                case "GPUTargetFanSpeed":
+                    requiredAttrs[2] = attributes.get(i);
+                    break;
+                    
+                case "GPUFanControlState":
+                    requiredAttrs[3] = attributes.get(i);
+                    break;
+                    
+                case "GPUCoreTemp":
+                    requiredAttrs[4] = attributes.get(i);
                     break;
             }
         }
         
-        updater = new AttributeUpdater(attributes);
-        updater.updateAll(true);
+        updater = new AttributeUpdater();
+        updater.setUpdateDelay(350);
         
         //TabPanel - has to be set up first before Menu for the "Tabs" menu item.
-        tabPanel = new AppTabPane(attributes, perfLevels);
+        tabPanel = new AppTabPane(attributes, perfLevels, requiredAttrs);
         tabPanel.setMinHeight(super.getMinHeight());
         tabPanel.setMinWidth(super.getMinWidth());
         
@@ -60,6 +80,7 @@ public class AppFrame extends BorderPane
         
         super.setTop(appMenu);
         super.setCenter(tabPanel);
+        updater.updateAll(attrs, false);
         
         this.initAttributeUpdateThread();
     }
@@ -67,7 +88,7 @@ public class AppFrame extends BorderPane
     {
         try
         {
-            new GoliathThread(this.getClass(), this, this.getClass().getDeclaredMethod("updateAttributes")).start();
+            new GoliathThread(this, this.getClass().getDeclaredMethod("updateAttributes")).start();
         }
         catch (NoSuchMethodException | SecurityException ex)
         {
@@ -78,16 +99,7 @@ public class AppFrame extends BorderPane
     {
         while(true)
         {
-            updater.updateAll(true);
-            
-            try
-            {
-                Thread.sleep(2000);
-            }
-            catch (InterruptedException ex)
-            {
-                Logger.getLogger(AppFrame.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            updater.updateAll(updateableAttrs, true);
         }
     }
 }

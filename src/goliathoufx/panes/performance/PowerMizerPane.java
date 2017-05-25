@@ -5,20 +5,15 @@
  */
 package goliathoufx.panes.performance;
 
-import goliath.ou.attribute.AttributePusher;
+import goliath.ou.controller.PowerMizerController;
 import goliath.ou.performance.PerformanceLevel;
+import goliathoufx.panes.performance.powermizer.PerformanceModePane;
 import java.util.ArrayList;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.geometry.Insets;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 
 /**
  *
@@ -32,15 +27,14 @@ public class PowerMizerPane extends BorderPane
     private final TableColumn<PerformanceLevel, Integer> maxClock;
     private final TableColumn<PerformanceLevel, Integer> minMemory;
     private final TableColumn<PerformanceLevel, Integer> maxMemory;
-    private final ComboBox<String> modes;
     
-    private final HBox performancePane;
+    private final PerformanceModePane performancePane;
     
-    public PowerMizerPane(ArrayList<PerformanceLevel> perfLevels)
+    public PowerMizerPane(ArrayList<PerformanceLevel> perfLevels, PowerMizerController powerMizer)
     {
         super();
         
-        table = new TableView(FXCollections.observableList(perfLevels));
+        table = new TableView<>(FXCollections.observableList(perfLevels));
         table.setMinHeight(125);
         table.setMaxHeight(125);
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -48,60 +42,29 @@ public class PowerMizerPane extends BorderPane
         
         perfLevel = new TableColumn<>("Performance Level");
         perfLevel.setCellValueFactory(new PropertyValueFactory("name"));
+        perfLevel.setSortable(false);
         
         minClock = new TableColumn<>("Min Core(MHz)");
-        minClock.setCellValueFactory(new PropertyValueFactory("minClock"));
+        minClock.setCellValueFactory(new PropertyValueFactory("minCore"));
+        minClock.setSortable(false);
         
         maxClock = new TableColumn<>("Max Core(MHz)");
-        maxClock.setCellValueFactory(new PropertyValueFactory("maxClock"));
+        maxClock.setCellValueFactory(new PropertyValueFactory("maxCore"));
+        maxClock.setSortable(false);
         
         minMemory = new TableColumn<>("Min Memory(MHz)");
         minMemory.setCellValueFactory(new PropertyValueFactory("minMemory"));
+        minMemory.setSortable(false);
         
         maxMemory = new TableColumn<>("Max Memory(MHz)");
         maxMemory.setCellValueFactory(new PropertyValueFactory("maxMemory"));
+        maxMemory.setSortable(false);
         
         table.getColumns().addAll(perfLevel, minClock, maxClock, minMemory, maxMemory);
         
-        performancePane = new HBox();
-        
-        performancePane.setPadding(new Insets(10,10,10,10));
-        performancePane.setSpacing(5);
-        
-        performancePane.getChildren().add(new Label("Performance Mode:"));
-        
-        modes = new ComboBox(FXCollections.observableArrayList("Adaptive", "Max Performance", "Driver Controlled(Auto)"));
-        modes.getSelectionModel().select(0);
-        modes.getSelectionModel().selectedItemProperty().addListener(new modeHandler());
-        performancePane.getChildren().add(modes);
+        performancePane = new PerformanceModePane(powerMizer);
         
         super.topProperty().set(table);
         super.centerProperty().set(performancePane);
-    }
-    private class modeHandler implements ChangeListener
-    {
-        private AttributePusher pusher;
-
-        @Override
-        public void changed(ObservableValue observable, Object oldValue, Object newValue)
-        {
-            pusher = new AttributePusher();
-            switch((String)newValue)
-            {
-                case "Adaptive":
-                    pusher.pushAttribute("GPUPowerMizerMode", "0");
-                    break;
-                    
-                case "Max Performance":
-                    pusher.pushAttribute("GPUPowerMizerMode", "1");
-                    break;
-                
-                case "Driver Controlled(Auto)":
-                    pusher.pushAttribute("GPUPowerMizerMode", "2");
-                    break;
-            }
-            pusher.terminate();
-        }
-        
     }
 }

@@ -38,12 +38,19 @@ public class AppSettingsDirectory extends File
 {
     private final File appConfig;
     private final File fanProfilesDir;
+    private final File attributesDir;
     private final File defaultFanProfile;
     private final File gpuInfo;
     
     public AppSettingsDirectory(String dir) throws IOException
     {
         super(dir);
+        
+        appConfig = new File(super.getAbsolutePath() + "/app.csv");
+        gpuInfo = new File(super.getAbsolutePath() + "/gpuinfo.csv");
+        fanProfilesDir = new File(super.getAbsolutePath() + "/Fan Profiles");
+        defaultFanProfile = new File(fanProfilesDir.getAbsolutePath() + "/default.csv");
+        attributesDir = new File(super.getAbsolutePath() + "/Attributes");
         
         if(!super.exists())
         {
@@ -53,34 +60,33 @@ public class AppSettingsDirectory extends File
             this.createDefaultFanProfile();
         }
         
-        appConfig = new File(super.getAbsolutePath() + "/app.csv");
-        
-        if(appConfig == null)
+        if(!appConfig.exists())
             this.createDefaultConfig();
-        
-        gpuInfo = new File(super.getAbsolutePath() + "/gpuinfo.csv");
         
         if(!gpuInfo.exists())
             this.createGPUInfo();
         
-        fanProfilesDir = new File(super.getAbsolutePath() + "/Fan Profiles");
-        
         if(!fanProfilesDir.exists())
             this.createFanProfileDirectory();
         
-        defaultFanProfile = new File(fanProfilesDir.getAbsolutePath() + "/default.csv");
-        
         if(!defaultFanProfile.exists())
             this.createDefaultFanProfile();
+        
+        if(!attributesDir.exists())
+            this.createAttributesDirectory();
     }
     
     private void createAppDirectory() throws IOException
     {
-        super.createNewFile();
+        super.mkdir();
     }
     private void createFanProfileDirectory()
     {
         fanProfilesDir.mkdir();
+    }
+    private void createAttributesDirectory()
+    {
+        attributesDir.mkdir();
     }
     private void createDefaultConfig() throws IOException
     {
@@ -107,16 +113,16 @@ public class AppSettingsDirectory extends File
         writer.addKeyValue("update_speed", "1000");
         writer.addKeyValue("smooth", "true");
                 
-        writer.addKeyValue("node", "15");
-        writer.addKeyValue("node", "20");
-        writer.addKeyValue("node", "25");
-        writer.addKeyValue("node", "30");
-        writer.addKeyValue("node", "35");
-        writer.addKeyValue("node", "40");
-        writer.addKeyValue("node", "45");
-        writer.addKeyValue("node", "50");
-        writer.addKeyValue("node", "55");
-        writer.addKeyValue("node", "60");
+        writer.addKeyValue("node_35", "15");
+        writer.addKeyValue("node_40", "20");
+        writer.addKeyValue("node_45", "25");
+        writer.addKeyValue("node_50", "30");
+        writer.addKeyValue("node_55", "35");
+        writer.addKeyValue("node_60", "40");
+        writer.addKeyValue("node_65", "45");
+        writer.addKeyValue("node_70", "50");
+        writer.addKeyValue("node_75", "55");
+        writer.addKeyValue("node_80", "60");
     }
 
     private void createGPUInfo() throws IOException
@@ -134,6 +140,10 @@ public class AppSettingsDirectory extends File
     public File getAppConfig()
     {
         return appConfig;
+    }
+    public File getAttributesDirectory()
+    {
+        return attributesDir;
     }
     public File getFanProfileDirectory()
     {

@@ -7,6 +7,7 @@ import javafx.scene.control.TextArea;
 public class ConsolePane extends TextArea
 {
     public static ConsolePane pane;
+    private static ArrayList<String> preInitMsgs;
     
     public ConsolePane()
     {
