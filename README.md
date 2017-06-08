@@ -10,6 +10,7 @@ You can download from the [releases](https://github.com/BlueGoliath/Goliath-Over
 * Apply over or under clocks to graphics core and memory transfer rate
 * Increase voltage
 * Decrease or increase GPU power limit via Nvidia SMI
+* Apply a fan profile(experimental)
 
 ## How it works
 The Goliath Overclocking utility uses custom made Java Controller classes to push and pull Nvidia attribute data from the command line via the Goliath Terminal class. Graphics core, memory, voltage, and fan are done via nvidia-settings interface while Power limit is done via the nvidia-smi CLI interface. 
@@ -30,8 +31,7 @@ You can tweak values in the application config file 'app.csv' in the folder 'Gol
 Native packaged versions do not need Java as a JRE is automatically included
 
 ## Known issues
-* Spinner UI components do not automatically update on key type(hit enter to set a number)
-* Spinner exception is thrown if a user attempts to enter a non numeric number
+* Fan is not set back to auto on app 
 * Application attribute update thread will crash if the computer goes to sleep while running
 * Attribute updating is CPU intensive.
 * User root password storing method may not be secure.
