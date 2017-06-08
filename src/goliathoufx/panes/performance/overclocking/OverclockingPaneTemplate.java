@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package goliathoufx.panes.performance.overclocking;
 
 import javafx.geometry.Insets;
@@ -11,12 +6,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.layout.GridPane;
-import javafx.scene.text.TextAlignment;
 
-/**
- *
- * @author ty
- */
 public class OverclockingPaneTemplate extends GridPane
 {
     private final Label currentValueLabel, minValueLabel, maxValueLabel, currentMinValue, currentMaxValue;
@@ -27,6 +17,7 @@ public class OverclockingPaneTemplate extends GridPane
     public OverclockingPaneTemplate(boolean showReset)
     {
         super();
+        super.getStyleClass().add("hbox");
         super.setPadding(new Insets(10,10,10,10));
       
         super.setVgap(5);
@@ -48,9 +39,7 @@ public class OverclockingPaneTemplate extends GridPane
             reset.setPrefWidth(100);
         }
         
-        currentValueSpinner.setPrefWidth(125);
-        
-        currentValueSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(-200, 1000, 0));
+        currentValueSpinner.setPrefWidth(85);
         
         super.add(currentValueLabel, 0, 0);
         super.add(minValueLabel, 1, 0);
@@ -82,7 +71,7 @@ public class OverclockingPaneTemplate extends GridPane
     }
     public void setSpinnerModel(int min, int max, int defaultInt)
     {
-        currentValueSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(min, max, defaultInt));
+        currentValueSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(min, max, 0));
     }
     public void setCurrentValueLabel(String str)
     {

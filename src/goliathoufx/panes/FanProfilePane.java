@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package goliathoufx.panes;
 
 import goliath.ou.attribute.Attribute;
@@ -10,12 +5,15 @@ import goliath.ou.controller.FanModeController;
 import goliath.ou.controller.FanSpeedController;
 import goliath.ou.fan.FanManager;
 import goliath.ou.fan.FanProfile;
-import goliath.ou.fan.FanProfileLoader;
+import goliath.ou.fan.FanProfileImporter;
 import goliath.ou.utility.GoliathThread;
 import goliathoufx.GoliathOUFX;
 import goliathoufx.panes.fan.FanProfileEditPane;
+import goliathoufx.panes.fan.ProfileContextMenu;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.io.File;
+import java.util.ArrayList;
 import javafx.collections.FXCollections;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -25,63 +23,54 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-/**
- *
- * @author ty
- */
 public class FanProfilePane extends HBox
 {
     private final FanProfileEditPane editPane;
     private final ListView<FanProfile> profileList;
     private final VBox leftPane;
-    private final Button applyButton, openButton, deleteButton, renameButton, newButton;
+    private final Button applyButton;
     private final FanManager manager;
+    private final ArrayList<FanProfile> profiles;
     
     public FanProfilePane(Attribute fan, Attribute mode, Attribute temp)
     {
         super();
         
-        FanProfileLoader profiles = new FanProfileLoader(GoliathOUFX.APPDIR.getFanProfileDirectory().listFiles());
-        profiles.loadProfiles();
+        FanProfileImporter profilesImporter = new FanProfileImporter();
         
-        editPane = new FanProfileEditPane(profiles.getLoadedProfiles().get(0));
+        File[] fanProfiles = GoliathOUFX.APPDIR.getFanProfileDirectory().listFiles();
+        
+        profiles = new ArrayList<>();
+        
+        for(int i = 0; i < fanProfiles.length; i++)
+        {
+            profilesImporter.importObject(fanProfiles[i]);
+            profiles.add(profilesImporter.getImportedObject());
+        }
+        
+        editPane = new FanProfileEditPane(profiles.get(0));
         manager = new FanManager(new FanSpeedController(fan), new FanModeController(mode), temp);
         
         leftPane = new VBox();
         
         profileList = new ListView<>();
         profileList.setEditable(false);
-        profileList.setPrefWidth(150);
-        profileList.setItems(FXCollections.observableArrayList(profiles.getLoadedProfiles()));
+        profileList.setPrefWidth(125);
+        profileList.setItems(FXCollections.observableArrayList(profiles));
         profileList.getSelectionModel().selectFirst();
         profileList.setOnMouseClicked(new ListHandler());
+        profileList.setContextMenu(new ProfileContextMenu(profileList));
         
         profileList.setPlaceholder(new Label("No Profiles"));
         
         applyButton = new Button("Apply");
-        applyButton.setMinWidth(100);
-        applyButton.setMinHeight(55);
+        applyButton.setPrefWidth(125);
+        applyButton.setMinHeight(47);
         applyButton.setOnMouseClicked(new ApplyButtonHandler(this));
         
-        openButton = new Button("Open");
-        openButton.setMinWidth(100);
-        openButton.setMinHeight(55);
+        leftPane.getChildren().addAll(profileList, applyButton);
         
-        deleteButton = new Button("Delete");
-        deleteButton.setMinWidth(100);
-        deleteButton.setMinHeight(55);
-        
-        renameButton = new Button("Rename");
-        renameButton.setMinWidth(100);
-        renameButton.setMinHeight(55);
-        
-        newButton = new Button("New");
-        newButton.setMinWidth(100);
-        newButton.setMinHeight(54);
-        
-        leftPane.getChildren().addAll(applyButton, openButton, renameButton, deleteButton, newButton);
-        
-        super.getChildren().addAll(leftPane, profileList, editPane);
+        super.getChildren().addAll(leftPane, editPane);
     }
     public void updateFan()
     {

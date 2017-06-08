@@ -1,7 +1,6 @@
 
 package goliathoufx.panes;
 
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -11,10 +10,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 
-/**
-    For getting user password.
-    @author ty
- */
 public class PasswordPane extends GridPane
 {
     private final PasswordField password;
@@ -24,6 +19,7 @@ public class PasswordPane extends GridPane
     public PasswordPane(AppTabPane pane)
     {
         super();
+        super.getStyleClass().add("pane");
         super.setPadding(new Insets(15,15,15,15));
         super.setVgap(10);
         

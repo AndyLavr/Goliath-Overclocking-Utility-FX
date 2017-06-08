@@ -16,7 +16,7 @@ public class PowerLimitPane extends OverclockingPaneTemplate
         super(false);
         
         super.setSpinnerModel(power.getMinValue(), power.getMaxVelue(), power.getMaxVelue());
-        super.setCurrentValueLabel("New Offset Value:");
+        super.setCurrentValueLabel("Offset Value:");
         super.setMinValueLabel("Minimum Value:");
         super.setMaxValueLabel("Maximum Value:");
         super.setCurrentSpinnerValue(power.getMaxVelue());

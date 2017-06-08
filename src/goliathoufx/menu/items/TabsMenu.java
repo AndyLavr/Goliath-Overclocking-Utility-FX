@@ -61,6 +61,7 @@ public class TabsMenu extends Menu
                     {
                         if(!tabPaneToAddTo.getTabs().contains(tabs[i]))
                             tabPaneToAddTo.getTabs().add(tabs[i]);
+                        tabPaneToAddTo.getSelectionModel().select(tabs[i]);
                     }
                 }
             }

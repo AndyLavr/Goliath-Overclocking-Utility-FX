@@ -6,6 +6,8 @@
 package goliathoufx.menu;
 
 import goliathoufx.menu.items.TabsMenu;
+import goliathoufx.menu.items.ThemesMenu;
+import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.TabPane;
@@ -22,11 +24,13 @@ public class AppMenu extends MenuBar
     public AppMenu(TabPane tabPane)
     {
         super();
+        super.getStyleClass().add("menubar");
         
         tabMenu = new TabsMenu(tabPane);
 
-        items = new Menu[1];
+        items = new Menu[2];
         items[0] = tabMenu;
+        items[1] = new ThemesMenu();
         
         super.getMenus().addAll(items);
     }

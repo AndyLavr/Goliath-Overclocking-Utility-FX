@@ -2,7 +2,6 @@ package goliathoufx.panes.fan;
 
 import goliath.ou.fan.FanNode;
 import goliath.ou.fan.FanProfile;
-import java.util.Collections;
 import javafx.collections.FXCollections;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -30,6 +29,7 @@ public class FanProfileEditPane extends VBox
     private final Label tempLabel, speedLabel;
     private final Spinner<Integer> tempSpinner, speedSpinner;
     private final Button apply;
+    private final HBox tempBox, speedBox;
     private FanProfile profile;
     
     public FanProfileEditPane(FanProfile file)
@@ -42,12 +42,12 @@ public class FanProfileEditPane extends VBox
         tempCol.setSortable(true);
         tempCol.setSortType(TableColumn.SortType.ASCENDING);
         
-        
         speedCol = new TableColumn<>("Speed(%)");
         speedCol.setCellValueFactory(new PropertyValueFactory("speed"));
         
         tempTable = new TableView<>();
-        tempTable.setPrefWidth(225);
+        tempTable.setMinWidth(625);
+        tempTable.setMaxWidth(625);
         tempTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         tempTable.setItems(FXCollections.observableArrayList(profile.getNodes()));
         tempTable.getSortOrder().add(tempCol);
@@ -56,6 +56,14 @@ public class FanProfileEditPane extends VBox
         menu = new ContextMenu();
         menu.getItems().add(new DeleteItem());
         tempTable.setContextMenu(menu);
+        
+        tempBox = new HBox();
+        tempBox.getStyleClass().add("hbox");
+        tempBox.setSpacing(5);
+        
+        speedBox = new HBox();
+        speedBox.getStyleClass().add("hbox");
+        speedBox.setSpacing(5);
         
         tempLabel = new Label("Tempature(C):");
         speedLabel = new Label("Speed(%):");
@@ -68,14 +76,18 @@ public class FanProfileEditPane extends VBox
         speedSpinner.setPrefWidth(100);
         speedSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(5, 100, 5));
         
+        tempBox.getChildren().addAll(tempLabel, tempSpinner);
+        speedBox.getChildren().addAll(speedLabel, speedSpinner);
+        
         apply = new Button("Apply");
         apply.setPrefWidth(90); 
         apply.setOnMouseClicked(new ApplyButtonHandler());
         
         tempEditOpts = new HBox();
+        tempEditOpts.getStyleClass().add("hbox");
         tempEditOpts.setPadding(new Insets(10,10,10,10));
-        tempEditOpts.setSpacing(6);
-        tempEditOpts.getChildren().addAll(tempLabel, tempSpinner, speedLabel, speedSpinner, apply);
+        tempEditOpts.setSpacing(16);
+        tempEditOpts.getChildren().addAll(tempBox, speedBox, apply);
         
         super.getChildren().addAll(tempTable, tempEditOpts); 
     }
@@ -99,7 +111,6 @@ public class FanProfileEditPane extends VBox
             }
         }
     }
-
     private class ApplyButtonHandler implements EventHandler<MouseEvent>
     {
         @Override
@@ -123,7 +134,6 @@ public class FanProfileEditPane extends VBox
             
         }
     }
-    
     public void setFanProfile(FanProfile file)
     {
         profile = file;

@@ -3,24 +3,20 @@ package goliathoufx;
 import goliath.ou.attribute.Attribute;
 import goliath.ou.attribute.AttributeExporter;
 import goliath.ou.attribute.AttributeImporter;
-import goliath.ou.attribute.AttributeUpdater;
 import goliath.ou.utility.CsvReader;
-import goliath.ou.utility.CsvWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
+import javafx.stage.StageStyle;
 
 public class GoliathOUFX extends Application
 {
     private static ArrayList<Attribute> attributes;
     public static AppSettingsDirectory APPDIR;
+    public static Scene scene;
     
     public static void main(String[] args) throws IOException
     {
@@ -37,17 +33,16 @@ public class GoliathOUFX extends Application
     @Override
     public void start(Stage stage) throws Exception
     {
-        AppFrame root;
-
-        root = new AppFrame(attributes);
+        scene = new Scene(new AppFrame(attributes, stage));
         
-        Scene appScene = new Scene(root);
+        scene.getStylesheets().add("skins/Goliath-Numix.css");
+        
         stage.setTitle("Goliath Overclocking Utility V" + AppSettings.getVersion());
+        stage.initStyle(StageStyle.UNDECORATED);
         stage.setResizable(false);
-        stage.setHeight(370);
-        stage.setWidth(750);
-        stage.setOnCloseRequest(new ExitHandler());
-        stage.setScene(appScene);
+        stage.setHeight(372);
+        stage.setWidth(750); 
+        stage.setScene(scene);
         stage.show();
     }
 
@@ -66,7 +61,7 @@ public class GoliathOUFX extends Application
             newAttributes.add(new Attribute("RefreshRate", "Display Refresh Rate", null, true, false));
             newAttributes.add(new Attribute("GpuUUID", "GPU ID", null, true, false));
             newAttributes.add(new Attribute("CUDACores", "GPU CUDA Cores", null, true, false));
-            newAttributes.add(new Attribute("GPUCurrentClockFreqs", "Current Clocks", "MHz", true, true));
+            newAttributes.add(new Attribute("GPUCurrentClockFreqs", "GPU and Memory clocks", "MHz", true, true));
             newAttributes.add(new Attribute("TotalDedicatedGPUMemory", "Dedicated GPU Memory", "MB", true, false));
             newAttributes.add(new Attribute("UsedDedicatedGPUMemory", "Used GPU Memory", "MB", true, true));
             newAttributes.add(new Attribute("GPUAdaptiveClockState", "Adaptive Clocking", null, true, false));
@@ -91,60 +86,10 @@ public class GoliathOUFX extends Application
 
         files = attrDir.listFiles();
 
-        for (int i = 0; i < files.length; i++)
+        for(int i = 0; i < files.length; i++)
         {
             importer.importObject(files[i]);
             attributes.add(importer.getImportedObject());
-        }
-    }
-    private static void initGPUInfo(File gpuInfo) throws FileNotFoundException, IOException
-    {
-        CsvReader reader =  new CsvReader(gpuInfo);
-        CsvWriter writer = new CsvWriter(gpuInfo);
-        
-        if(reader.getKeys().isEmpty())
-        {
-            AttributeUpdater updater = new AttributeUpdater();
-            
-            for(int i = 0; i < attributes.size(); i++)
-            {
-                switch(attributes.get(i).cmdNameProperty().getValue())
-                {
-                    case "GpuUUID":
-                    case "CUDACores":
-                    case "TotalDedicatedGPUMemory":
-                    {
-                        updater.update(attributes.get(i));
-                        writer.addKeyValue(attributes.get(i).cmdNameProperty().getValue(), attributes.get(i).cmdValueProperty().getValue());
-                        
-                        break;
-                    }
-                }
-            }
-        }
-        
-        for(int i = 0; i < attributes.size(); i++)
-        {
-            switch(attributes.get(i).cmdNameProperty().getValue())
-            {
-                    case "GpuUUID":
-                    case "CUDACores":
-                    case "TotalDedicatedGPUMemory":
-                    {
-                        attributes.get(i).setCmdValue(reader.getKeyValues(attributes.get(i).cmdNameProperty().getValue()).get(0));
-                        
-                        break;
-                    }
-            }
-        }
-    }
-    private class ExitHandler implements EventHandler<WindowEvent>
-    {
-        @Override
-        public void handle(WindowEvent event)
-        {
-            Platform.exit();
-            System.exit(0);
         }
     }
 }

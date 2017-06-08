@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 ty.
+ * Copyright 2017 Ty Young.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -127,15 +127,15 @@ public class AppSettingsDirectory extends File
 
     private void createGPUInfo() throws IOException
     {
-        CsvWriter writer;
-        PerfLevelParser parser = new PerfLevelParser();
-        ArrayList<PerformanceLevel> perfs = new ArrayList<>();
+        //CsvWriter writer;
+        //PerfLevelParser parser = new PerfLevelParser();
+        //ArrayList<PerformanceLevel> perfs = new ArrayList<>();
         
         gpuInfo.createNewFile();
         
-        perfs = parser.beginParse();
+        //perfs = parser.beginParse();
         
-        writer = new CsvWriter(gpuInfo);
+        //writer = new CsvWriter(gpuInfo);
     }
     public File getAppConfig()
     {

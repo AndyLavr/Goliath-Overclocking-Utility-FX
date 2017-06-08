@@ -8,34 +8,30 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 
-/**
- *
- * @author ty
- */
 public class AppTabPane extends TabPane
 {   
     public static boolean POWER_ONLY = false;
+    public static boolean BLOCK_TAB_CREATION;
     
     private final TabHandler handler;
     private final Tab[] tabs;
     private final PasswordPane passwordPane;
     private final PerformancePane performancePane;
     
-    public static boolean BLOCK_TAB_CREATION;
-    
     public AppTabPane(ArrayList<Attribute> attributes, ArrayList<PerformanceLevel> perfLevels, Attribute[] attrs)
     {
         super();
         super.setTabClosingPolicy(TabClosingPolicy.ALL_TABS);
-        
+          
         ConsolePane pane = new ConsolePane();
+        ConsolePane.initPane(pane);
         
         BLOCK_TAB_CREATION = false;
         passwordPane = new PasswordPane(this);
         performancePane = new PerformancePane(perfLevels, attributes, this, attrs);
         handler = new TabHandler(this);
         
-        tabs = new Tab[4];
+        tabs = new Tab[5];
         
         tabs[0] = new Tab("Information");
         tabs[0].setContent(new InformationPane(attributes));
@@ -49,7 +45,8 @@ public class AppTabPane extends TabPane
         tabs[3] = new Tab("App Console");
         tabs[3].setContent(pane);
         
-        ConsolePane.initPane(pane);
+        tabs[4] = new Tab("About");
+        tabs[4].setContent(new AboutPane());
         
         for(int i = 0; i < tabs.length; i++)
             tabs[i].setOnCloseRequest(handler);

@@ -1,16 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package goliathoufx.panes.performance.overclocking;
 
 import goliath.ou.interfaces.GPUController;
 
-/**
- *
- * @author ty
- */
 public class VoltageOffsetPane extends OverclockingPaneTemplate
 {
     public VoltageOffsetPane(GPUController<Integer> voltage)
@@ -18,7 +9,7 @@ public class VoltageOffsetPane extends OverclockingPaneTemplate
         super(true);
         
         super.setSpinnerModel(voltage.getMinValue(), voltage.getMaxVelue(), 0);
-        super.setCurrentValueLabel("New Offset Value:");
+        super.setCurrentValueLabel("Offset Value:");
         super.setMinValueLabel("Minimum Value:");
         super.setMaxValueLabel("Maximum Value:");
         super.setCurrentSpinnerValue(voltage.getCurrentValue()/1000);

@@ -21,7 +21,7 @@ public class MemoryOffsetPane extends OverclockingPaneTemplate
         super(true);
         
         super.setSpinnerModel(memory.getMinValue(), memory.getMaxVelue(), 0);
-        super.setCurrentValueLabel("New Offset Value:");
+        super.setCurrentValueLabel("Offset Value:");
         super.setMinValueLabel("Minimum Value:");
         super.setMaxValueLabel("Maximum Value:");
         super.setCurrentSpinnerValue(memory.getCurrentValue());

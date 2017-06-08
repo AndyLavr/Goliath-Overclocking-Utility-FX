@@ -10,9 +10,11 @@ import goliathoufx.panes.AppTabPane;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.Scene;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
-public class AppFrame extends BorderPane
+public class AppFrame extends VBox
 {
     private final AppMenu appMenu;
     private final AttributeUpdater updater;
@@ -20,9 +22,11 @@ public class AppFrame extends BorderPane
     private final ArrayList<PerformanceLevel> perfLevels;
     private final ArrayList<Attribute> attrs, updateableAttrs;
     
-    public AppFrame(ArrayList<Attribute> attributes)
+    public AppFrame(ArrayList<Attribute> attributes, Stage appStage)
     {
         super();
+        
+        super.getChildren().add(new TitlePane("Goliath Overclocking Utility V" + AppSettings.getVersion(), appStage));
         
         Attribute[] requiredAttrs = new Attribute[5];
         
@@ -78,8 +82,7 @@ public class AppFrame extends BorderPane
         appMenu = new AppMenu(tabPanel);
         appMenu.useSystemMenuBarProperty();
         
-        super.setTop(appMenu);
-        super.setCenter(tabPanel);
+        super.getChildren().addAll(appMenu, tabPanel);
         updater.updateAll(attrs, false);
         
         this.initAttributeUpdateThread();

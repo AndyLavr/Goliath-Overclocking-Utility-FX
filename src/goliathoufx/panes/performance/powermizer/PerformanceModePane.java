@@ -13,11 +13,11 @@ import javafx.scene.layout.HBox;
 public class PerformanceModePane extends HBox
 {
     private final ComboBox<String> modes;
-    private final Label modeDesc;
     
     public PerformanceModePane(PowerMizerController powerMizer)
     {
         super();
+        super.getStyleClass().add("hbox");
         super.setPadding(new Insets(10,10,10,10));
         super.setSpacing(5);
         
@@ -25,9 +25,7 @@ public class PerformanceModePane extends HBox
         modes.getSelectionModel().select(powerMizer.getCurrentValue());
         modes.getSelectionModel().selectedItemProperty().addListener(new ModeHandler(powerMizer));
         
-        modeDesc = new Label("Increases performance as needed.");
-        
-        super.getChildren().addAll(new Label("Performance Mode:"), modes, new Label("Description:"), modeDesc);
+        super.getChildren().addAll(new Label("Performance Mode:"), modes);
     }
     private class ModeHandler implements ChangeListener<String>
     {
@@ -45,17 +43,14 @@ public class PerformanceModePane extends HBox
             {
                 case "Adaptive":
                     cont.setValue(0);
-                    modeDesc.setText("Increases performance as needed.");
                     break;
                     
                 case "Max Performance":
                     cont.setValue(1);
-                    modeDesc.setText("Forces high GPU clock speeds.");
                     break;
                 
                 case "Driver Controlled(Auto)":
                     cont.setValue(2);
-                    modeDesc.setText("Controlled by the Nvidia graphics driver.");
                     break;
             }
         } 

@@ -7,11 +7,11 @@ import javafx.scene.control.TextArea;
 public class ConsolePane extends TextArea
 {
     public static ConsolePane pane;
-    private static ArrayList<String> preInitMsgs;
     
     public ConsolePane()
     {
         super();
+        super.setEditable(false);
         super.setWrapText(true);
         
         super.appendText("Goliath Overclocking Utility V" + AppSettings.getVersion());
