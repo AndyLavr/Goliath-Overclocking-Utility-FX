@@ -1,5 +1,5 @@
 # Goliath-Overclocking-Utility-FX
-Linux Nvidia GPU overclocking utility written in JavaFX - currently pre-alpha
+Linux Nvidia GPU overclocking utility written in JavaFX - currently Alpha 2 - Alpha 3
 
 ## Download
 You can download from the [releases](https://github.com/BlueGoliath/Goliath-Overclocking-Utility-FX/releases) page.
