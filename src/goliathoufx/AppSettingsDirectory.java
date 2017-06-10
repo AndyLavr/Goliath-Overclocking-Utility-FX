@@ -23,16 +23,13 @@
  */
 package goliathoufx;
 
-import goliath.ou.performance.PerfLevelParser;
-import goliath.ou.performance.PerformanceLevel;
 import goliath.ou.utility.CsvWriter;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
 /**
- *
- * @author ty
+
+ @author ty
  */
 public class AppSettingsDirectory extends File
 {
@@ -41,78 +38,100 @@ public class AppSettingsDirectory extends File
     private final File attributesDir;
     private final File defaultFanProfile;
     private final File gpuInfo;
-    
-    public AppSettingsDirectory(String dir) throws IOException
+
+    public AppSettingsDirectory(String dir)
     {
         super(dir);
-        
+
         appConfig = new File(super.getAbsolutePath() + "/app.csv");
         gpuInfo = new File(super.getAbsolutePath() + "/gpuinfo.csv");
         fanProfilesDir = new File(super.getAbsolutePath() + "/Fan Profiles");
         defaultFanProfile = new File(fanProfilesDir.getAbsolutePath() + "/default.csv");
         attributesDir = new File(super.getAbsolutePath() + "/Attributes");
-        
-        if(!super.exists())
+
+        try
         {
-            this.createAppDirectory();
-            this.createDefaultConfig();
-            this.createFanProfileDirectory();
-            this.createDefaultFanProfile();
+
+            if (!super.exists())
+            {
+                this.createAppDirectory();
+                this.createDefaultConfig();
+                this.createFanProfileDirectory();
+                this.createDefaultFanProfile();
+            }
+
+            if (!appConfig.exists())
+            {
+                this.createDefaultConfig();
+            }
+
+            if (!gpuInfo.exists())
+            {
+                this.createGPUInfo();
+            }
+
+            if (!fanProfilesDir.exists())
+            {
+                this.createFanProfileDirectory();
+            }
+
+            if (!defaultFanProfile.exists())
+            {
+                this.createDefaultFanProfile();
+            }
+
+            if (!attributesDir.exists())
+            {
+                this.createAttributesDirectory();
+            }
+        } 
+        catch (IOException e)
+        {
+            System.out.println("Failed to create app directory.");
         }
-        
-        if(!appConfig.exists())
-            this.createDefaultConfig();
-        
-        if(!gpuInfo.exists())
-            this.createGPUInfo();
-        
-        if(!fanProfilesDir.exists())
-            this.createFanProfileDirectory();
-        
-        if(!defaultFanProfile.exists())
-            this.createDefaultFanProfile();
-        
-        if(!attributesDir.exists())
-            this.createAttributesDirectory();
     }
-    
+
     private void createAppDirectory() throws IOException
     {
         super.mkdir();
     }
+
     private void createFanProfileDirectory()
     {
         fanProfilesDir.mkdir();
     }
+
     private void createAttributesDirectory()
     {
         attributesDir.mkdir();
     }
+
     private void createDefaultConfig() throws IOException
     {
         CsvWriter writer;
-        
+
         appConfig.createNewFile();
 
         writer = new CsvWriter(appConfig.getAbsoluteFile());
-            
+
         writer.addKeyValue("version", "1.0");
         writer.addKeyValue("theme", "default");
         writer.addKeyValue("safety", "true");
         writer.addKeyValue("show_extra_attribute_data", "false");
     }
+
     private void createDefaultFanProfile() throws IOException
     {
         CsvWriter writer;
-        
+
         defaultFanProfile.createNewFile();
-            
+
         writer = new CsvWriter(defaultFanProfile);
-            
+
         writer.addKeyValue("display_name", "Default");
         writer.addKeyValue("update_speed", "1000");
         writer.addKeyValue("smooth", "true");
-                
+
         writer.addKeyValue("node_35", "15");
         writer.addKeyValue("node_40", "20");
         writer.addKeyValue("node_45", "25");
@@ -130,21 +149,23 @@ public class AppSettingsDirectory extends File
         //CsvWriter writer;
         //PerfLevelParser parser = new PerfLevelParser();
         //ArrayList<PerformanceLevel> perfs = new ArrayList<>();
-        
+
         gpuInfo.createNewFile();
-        
+
         //perfs = parser.beginParse();
-        
         //writer = new CsvWriter(gpuInfo);
     }
+
     public File getAppConfig()
     {
         return appConfig;
     }
+
     public File getAttributesDirectory()
     {
         return attributesDir;
     }
+
     public File getFanProfileDirectory()
     {
         return fanProfilesDir;

@@ -7,6 +7,7 @@ package goliathoufx.panes.performance;
 
 import goliath.ou.controller.PowerMizerController;
 import goliath.ou.performance.PerformanceLevel;
+import goliathoufx.InstanceProvider;
 import goliathoufx.panes.performance.powermizer.PerformanceModePane;
 import java.util.ArrayList;
 import javafx.collections.FXCollections;
@@ -30,11 +31,11 @@ public class PowerMizerPane extends BorderPane
     
     private final PerformanceModePane performancePane;
     
-    public PowerMizerPane(ArrayList<PerformanceLevel> perfLevels, PowerMizerController powerMizer)
+    public PowerMizerPane()
     {
         super();
         
-        table = new TableView<>(FXCollections.observableList(perfLevels));
+        table = new TableView<>(FXCollections.observableList(InstanceProvider.getPerformanceLevels()));
         table.setMinHeight(125);
         table.setMaxHeight(125);
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -62,7 +63,7 @@ public class PowerMizerPane extends BorderPane
         
         table.getColumns().addAll(perfLevel, minClock, maxClock, minMemory, maxMemory);
         
-        performancePane = new PerformanceModePane(powerMizer);
+        performancePane = new PerformanceModePane();
         
         super.topProperty().set(table);
         super.centerProperty().set(performancePane);

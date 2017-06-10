@@ -1,8 +1,5 @@
 package goliathoufx.panes;
 
-import goliath.ou.attribute.Attribute;
-import goliath.ou.performance.PerformanceLevel;
-import java.util.ArrayList;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.control.Tab;
@@ -18,7 +15,7 @@ public class AppTabPane extends TabPane
     private final PasswordPane passwordPane;
     private final PerformancePane performancePane;
     
-    public AppTabPane(ArrayList<Attribute> attributes, ArrayList<PerformanceLevel> perfLevels, Attribute[] attrs)
+    public AppTabPane()
     {
         super();
         super.setTabClosingPolicy(TabClosingPolicy.ALL_TABS);
@@ -28,19 +25,19 @@ public class AppTabPane extends TabPane
         
         BLOCK_TAB_CREATION = false;
         passwordPane = new PasswordPane(this);
-        performancePane = new PerformancePane(perfLevels, attributes, this, attrs);
+        performancePane = new PerformancePane(this);
         handler = new TabHandler(this);
         
         tabs = new Tab[5];
         
         tabs[0] = new Tab("Information");
-        tabs[0].setContent(new InformationPane(attributes));
+        tabs[0].setContent(new InformationPane());
         
         tabs[1] = new Tab("PowerMizer & Overclocking");
         tabs[1].setContent(performancePane);
         
         tabs[2] = new Tab("Fan Control");
-        tabs[2].setContent(new FanProfilePane(attrs[2], attrs[3], attrs[4]));
+        tabs[2].setContent(new FanProfilePane());
         
         tabs[3] = new Tab("App Console");
         tabs[3].setContent(pane);

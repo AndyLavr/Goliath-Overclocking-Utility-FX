@@ -13,6 +13,7 @@ import goliath.ou.controller.PowerLimitController;
 import goliath.ou.controller.PowerMizerController;
 import goliath.ou.controller.VoltageOffsetController;
 import goliath.ou.performance.PerformanceLevel;
+import goliathoufx.InstanceProvider;
 import goliathoufx.panes.performance.OverclockingTabPane;
 import goliathoufx.panes.performance.PowerMizerPane;
 import java.util.ArrayList;
@@ -31,42 +32,12 @@ public class PerformancePane extends BorderPane
     private final BorderPane buttonPane;
     private final OverclockingTabPane overclockingTabPane;
     private final Button apply, cancel;
-    private final ArrayList<PerformanceLevel> perfLevels;
-    private final GPUController[] controllers;
-    private GPUController<Integer> core, memory, voltage;
-    private PowerLimitController power;
-    private PowerMizerController powerMizer;
 
-    public PerformancePane(ArrayList<PerformanceLevel> perfLevelList, ArrayList<Attribute> attributes, AppTabPane pane, Attribute[] requiredAttrs)
+    public PerformancePane(AppTabPane pane)
     {
         super();
-        controllers = new GPUController[4];
-        perfLevels = perfLevelList;
-
-        core = new CoreOffsetController(requiredAttrs[0]);
-        memory = new MemoryOffsetController(requiredAttrs[1]);
         
-        for(int i = 0; i < attributes.size(); i++)
-        {
-            switch(attributes.get(i).cmdNameProperty().getValue())
-            {   
-                case "GPUOverVoltageOffset":
-                    voltage = new VoltageOffsetController(attributes.get(i));
-                    break;
-                    
-                case "GPUPowerMizerMode":
-                    powerMizer = new PowerMizerController(attributes.get(i));
-                    break;
-            }
-        }
-        power = new PowerLimitController();
-        
-        controllers[0] = core;
-        controllers[1] = memory;
-        controllers[2] = voltage;
-        controllers[3] = power;
-        
-        overclockingTabPane = new OverclockingTabPane(controllers, pane);
+        overclockingTabPane = new OverclockingTabPane(pane);
         
         apply = new Button("Apply All");
         apply.setMinWidth(100);
@@ -87,31 +58,37 @@ public class PerformancePane extends BorderPane
         apply.setOnMouseClicked(new ApplyButtonHandler(pane));
         cancel.setOnMouseClicked(new cancelButtonHandler());
 
-        super.topProperty().set(new PowerMizerPane(perfLevels, powerMizer));
+        super.topProperty().set(new PowerMizerPane());
         super.centerProperty().set(overclockingPane);
     }
     public void applyOCAll(CharSequence password)
     {
-            core.setValue(overclockingTabPane.getCoreSpinner().getValue());
-            memory.setValue(overclockingTabPane.getMemorySpinner().getValue());
-            voltage.setValue(overclockingTabPane.getVoltageSpinner().getValue()*1000);
+            InstanceProvider.getCoreOffsetController().setValue(overclockingTabPane.getCoreSpinner().getValue());
+            InstanceProvider.getMemoryOffsetController().setValue(overclockingTabPane.getMemorySpinner().getValue());
+            InstanceProvider.getVoltageOffsetController().setValue(overclockingTabPane.getVoltageSpinner().getValue()*1000);
             
-            power.setPassword(password);
-            power.setValue(overclockingTabPane.getPowerSpinner().getValue());
+            if(InstanceProvider.getPowerLimitController().isWorking())
+            {
+                ((PowerLimitController)InstanceProvider.getPowerLimitController()).setPassword(password);
+                InstanceProvider.getPowerLimitController().setValue(overclockingTabPane.getPowerSpinner().getValue());
+            }
             
             ConsolePane.addText("\nApplying all Overclocks...");
-            ConsolePane.addText(core.getOutput());
-            ConsolePane.addText(memory.getOutput());
-            ConsolePane.addText(voltage.getOutput()); 
-            ConsolePane.addText(power.getOutput());
+            ConsolePane.addText(InstanceProvider.getCoreOffsetController().getOutput());
+            ConsolePane.addText(InstanceProvider.getMemoryOffsetController().getOutput());
+            ConsolePane.addText(InstanceProvider.getVoltageOffsetController().getOutput()); 
+            
+            if(InstanceProvider.getPowerLimitController().isWorking())
+                ConsolePane.addText(InstanceProvider.getPowerLimitController().getOutput());
+            
             ConsolePane.addText("\nOverclocks Applied.");
     }
     public void applyPowerLimit(CharSequence password)
     {            
-            power.setPassword(password);
-            power.setValue(overclockingTabPane.getPowerSpinner().getValue());
+            ((PowerLimitController)InstanceProvider.getPowerLimitController()).setPassword(password);
+            InstanceProvider.getPowerLimitController().setValue(overclockingTabPane.getPowerSpinner().getValue());
             
-            ConsolePane.addText(power.getOutput());
+            ConsolePane.addText(InstanceProvider.getPowerLimitController().getOutput());
     }
     private class ApplyButtonHandler implements EventHandler
     {
@@ -134,14 +111,14 @@ public class PerformancePane extends BorderPane
         @Override
         public void handle(Event event)
         {
-            core.setValue(0);
-            memory.setValue(0);
-            voltage.setValue(0);
+            InstanceProvider.getCoreOffsetController().setValue(0);
+            InstanceProvider.getMemoryOffsetController().setValue(0);
+            InstanceProvider.getVoltageOffsetController().setValue(0);
             
             ConsolePane.addText("\nResetting Overclocks...");
-            ConsolePane.addText(core.getOutput());
-            ConsolePane.addText(memory.getOutput());
-            ConsolePane.addText(voltage.getOutput()); 
+            ConsolePane.addText(InstanceProvider.getCoreOffsetController().getOutput());
+            ConsolePane.addText(InstanceProvider.getMemoryOffsetController().getOutput());
+            ConsolePane.addText(InstanceProvider.getVoltageOffsetController().getOutput()); 
             ConsolePane.addText("\nOverclocks reset. Power Limit must be reset manually.");
         }
     }

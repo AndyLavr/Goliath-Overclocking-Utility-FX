@@ -1,6 +1,7 @@
 package goliathoufx.panes.performance.overclocking;
 
 import goliath.ou.interfaces.GPUController;
+import goliathoufx.InstanceProvider;
 import goliathoufx.panes.AppTabPane;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
@@ -11,17 +12,17 @@ import javafx.scene.input.MouseEvent;
  */
 public class PowerLimitPane extends OverclockingPaneTemplate
 {
-    public PowerLimitPane(GPUController<Integer> power, AppTabPane pane)
+    public PowerLimitPane(AppTabPane pane)
     {
         super(false);
         
-        super.setSpinnerModel(power.getMinValue(), power.getMaxVelue(), power.getMaxVelue());
+        super.setSpinnerModel(InstanceProvider.getPowerLimitController().getMinValue(), InstanceProvider.getPowerLimitController().getMaxVelue(), InstanceProvider.getPowerLimitController().getMaxVelue());
         super.setCurrentValueLabel("Offset Value:");
         super.setMinValueLabel("Minimum Value:");
         super.setMaxValueLabel("Maximum Value:");
-        super.setCurrentSpinnerValue(power.getMaxVelue());
-        super.setCurrentMinValue(String.valueOf(power.getMinValue()));
-        super.setCurrentMaxValue(String.valueOf(power.getMaxVelue()));
+        super.setCurrentSpinnerValue(InstanceProvider.getPowerLimitController().getMaxVelue());
+        super.setCurrentMinValue(String.valueOf(InstanceProvider.getPowerLimitController().getMinValue()));
+        super.setCurrentMaxValue(String.valueOf(InstanceProvider.getPowerLimitController().getMaxVelue()));
         
         super.getApplyButton().setOnMouseClicked(new PowerApplyHandler(pane));
     }
@@ -44,6 +45,5 @@ public class PowerLimitPane extends OverclockingPaneTemplate
             appTabs.promptPassword();
             AppTabPane.POWER_ONLY = false;  
         }
-        
     }
 }

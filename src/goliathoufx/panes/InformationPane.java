@@ -7,6 +7,7 @@ package goliathoufx.panes;
 
 import goliath.ou.attribute.Attribute;
 import goliathoufx.AppSettings;
+import goliathoufx.InstanceProvider;
 import java.util.ArrayList;
 import javafx.collections.FXCollections;
 import javafx.scene.control.TableColumn;
@@ -26,11 +27,11 @@ public class InformationPane extends Pane
     private TableColumn<Attribute, String> cmdName;
     private TableColumn<Attribute, String> cmdValue;
     
-    public InformationPane(ArrayList<Attribute> attributes)
+    public InformationPane()
     {
-        infoTable = new TableView<>(FXCollections.observableArrayList(attributes));
+        infoTable = new TableView<>(FXCollections.observableArrayList(InstanceProvider.getAttributes()));
         
-        infoTable.setItems(FXCollections.observableArrayList(attributes));
+        //infoTable.setItems(FXCollections.observableArrayList(attributes));
         
         if(AppSettings.getShowExtraAttributeInfo())
         {

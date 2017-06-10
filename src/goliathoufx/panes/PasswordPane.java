@@ -26,7 +26,7 @@ public class PasswordPane extends GridPane
         buttons = new HBox();
         buttons.setSpacing(10);
         
-        Label promptText = new Label("Root required.");
+        Label promptText = new Label("Sudo required.");
         
         okButton = new Button("OK");
         cancelButton = new Button("Cancel");
@@ -40,7 +40,7 @@ public class PasswordPane extends GridPane
         
         cancelButton.setOnMouseClicked(new CancelButtonHandler(pane));
         
-        password.setPromptText("Root Password");
+        password.setPromptText("Password");
         
         super.add(promptText, 0, 0);
         super.add(password, 0, 1);

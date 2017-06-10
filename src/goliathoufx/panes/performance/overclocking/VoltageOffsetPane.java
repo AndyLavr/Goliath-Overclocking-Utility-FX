@@ -1,23 +1,23 @@
 package goliathoufx.panes.performance.overclocking;
 
-import goliath.ou.interfaces.GPUController;
+import goliathoufx.InstanceProvider;
 
 public class VoltageOffsetPane extends OverclockingPaneTemplate
 {
-    public VoltageOffsetPane(GPUController<Integer> voltage)
+    public VoltageOffsetPane()
     {
         super(true);
         
-        super.setSpinnerModel(voltage.getMinValue(), voltage.getMaxVelue(), 0);
+        super.setSpinnerModel(InstanceProvider.getVoltageOffsetController().getMinValue(), InstanceProvider.getVoltageOffsetController().getMaxVelue(), 0);
         super.setCurrentValueLabel("Offset Value:");
         super.setMinValueLabel("Minimum Value:");
         super.setMaxValueLabel("Maximum Value:");
-        super.setCurrentSpinnerValue(voltage.getCurrentValue()/1000);
-        super.setCurrentMinValue(String.valueOf(voltage.getMinValue()));
-        super.setCurrentMaxValue(String.valueOf(voltage.getMaxVelue()));
+        super.setCurrentSpinnerValue(InstanceProvider.getVoltageOffsetController().getCurrentValue()/1000);
+        super.setCurrentMinValue(String.valueOf(InstanceProvider.getVoltageOffsetController().getMinValue()));
+        super.setCurrentMaxValue(String.valueOf(InstanceProvider.getVoltageOffsetController().getMaxVelue()));
 
-        super.getApplyButton().setOnMouseClicked(new ApplyHandler(super.getSpinner(), voltage));
-        super.getResetButton().setOnMouseClicked(new ResetHandler(voltage));
+        super.getApplyButton().setOnMouseClicked(new ApplyHandler(super.getSpinner(), InstanceProvider.getVoltageOffsetController()));
+        super.getResetButton().setOnMouseClicked(new ResetHandler(InstanceProvider.getVoltageOffsetController()));
     }
     public Integer getSpinnerValue()
     {

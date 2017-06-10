@@ -5,7 +5,7 @@
  */
 package goliathoufx.panes.performance;
 
-import goliath.ou.interfaces.GPUController;
+import goliathoufx.InstanceProvider;
 import goliathoufx.panes.AppTabPane;
 import goliathoufx.panes.performance.overclocking.CoreOffsetPane;
 import goliathoufx.panes.performance.overclocking.MemoryOffsetPane;
@@ -21,13 +21,14 @@ import javafx.scene.control.TabPane;
  */
 public class OverclockingTabPane extends TabPane
 {
+    
     private final Tab[] tabs;
     private final CoreOffsetPane corePane;
     private final MemoryOffsetPane memoryPane;
     private final VoltageOffsetPane voltagePane;
-    private final PowerLimitPane powerPane;
+    private PowerLimitPane powerPane;
     
-    public OverclockingTabPane(GPUController<Integer>[] controllers, AppTabPane pane)
+    public OverclockingTabPane(AppTabPane pane)
     {
         super();
         
@@ -35,12 +36,17 @@ public class OverclockingTabPane extends TabPane
         super.setMinWidth(650);
         super.setMaxWidth(650);
         
-        corePane = new CoreOffsetPane(controllers[0]);
-        memoryPane = new MemoryOffsetPane(controllers[1]);
-        voltagePane = new VoltageOffsetPane(controllers[2]);
-        powerPane = new PowerLimitPane(controllers[3], pane);
+        corePane = new CoreOffsetPane();
+        memoryPane = new MemoryOffsetPane();
+        voltagePane = new VoltageOffsetPane();
         
-        tabs = new Tab[4];
+        if(InstanceProvider.getPowerLimitController().isWorking())
+        {
+            powerPane = new PowerLimitPane(pane);
+            tabs = new Tab[4];
+        }
+        else
+            tabs = new Tab[3];
         
         tabs[0] = new Tab("Core Offset(MHz)");
         tabs[0].setContent(corePane);
@@ -51,8 +57,11 @@ public class OverclockingTabPane extends TabPane
         tabs[2] = new Tab("Voltage Offset(mV)");
         tabs[2].setContent(voltagePane);
                 
-        tabs[3] = new Tab("Power Limit(W)");
-        tabs[3].setContent(powerPane);
+        if(InstanceProvider.getPowerLimitController().isWorking())
+        {
+            tabs[3] = new Tab("Power Limit(W)");
+            tabs[3].setContent(powerPane);
+        }
         
         super.getTabs().addAll(tabs);
     }

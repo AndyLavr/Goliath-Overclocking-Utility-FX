@@ -8,6 +8,7 @@ import goliath.ou.fan.FanProfile;
 import goliath.ou.fan.FanProfileImporter;
 import goliath.ou.utility.GoliathThread;
 import goliathoufx.GoliathOUFX;
+import goliathoufx.InstanceProvider;
 import goliathoufx.panes.fan.FanProfileEditPane;
 import goliathoufx.panes.fan.ProfileContextMenu;
 import java.util.logging.Level;
@@ -32,13 +33,13 @@ public class FanProfilePane extends HBox
     private final FanManager manager;
     private final ArrayList<FanProfile> profiles;
     
-    public FanProfilePane(Attribute fan, Attribute mode, Attribute temp)
+    public FanProfilePane()
     {
         super();
         
         FanProfileImporter profilesImporter = new FanProfileImporter();
         
-        File[] fanProfiles = GoliathOUFX.APPDIR.getFanProfileDirectory().listFiles();
+        File[] fanProfiles = InstanceProvider.getAppDir().getFanProfileDirectory().listFiles();
         
         profiles = new ArrayList<>();
         
@@ -49,7 +50,7 @@ public class FanProfilePane extends HBox
         }
         
         editPane = new FanProfileEditPane(profiles.get(0));
-        manager = new FanManager(new FanSpeedController(fan), new FanModeController(mode), temp);
+        manager = new FanManager((FanSpeedController)InstanceProvider.getFanSpeedController(), (FanModeController)InstanceProvider.getFanModeController(), InstanceProvider.getTempAttribute());
         
         leftPane = new VBox();
         

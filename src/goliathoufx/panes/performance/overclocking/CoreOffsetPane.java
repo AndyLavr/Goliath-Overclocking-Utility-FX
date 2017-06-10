@@ -5,24 +5,24 @@
  */
 package goliathoufx.panes.performance.overclocking;
 
-import goliath.ou.interfaces.GPUController;
+import goliathoufx.InstanceProvider;
 
 public class CoreOffsetPane extends OverclockingPaneTemplate
 {
-    public CoreOffsetPane(GPUController<Integer> core)
+    public CoreOffsetPane()
     {
         super(true);
         
-        super.setSpinnerModel(core.getMinValue(), core.getMaxVelue(), 0);
+        super.setSpinnerModel(InstanceProvider.getCoreOffsetController().getMinValue(), InstanceProvider.getCoreOffsetController().getMaxVelue(), 0);
         super.setCurrentValueLabel("Offset Value:");
         super.setMinValueLabel("Minimum Value:");
         super.setMaxValueLabel("Maximum Value:");
-        super.setCurrentSpinnerValue(core.getCurrentValue());
-        super.setCurrentMinValue(String.valueOf(core.getMinValue()));
-        super.setCurrentMaxValue(String.valueOf(core.getMaxVelue()));
+        super.setCurrentSpinnerValue(InstanceProvider.getCoreOffsetController().getCurrentValue());
+        super.setCurrentMinValue(String.valueOf(InstanceProvider.getCoreOffsetController().getMinValue()));
+        super.setCurrentMaxValue(String.valueOf(InstanceProvider.getCoreOffsetController().getMaxVelue()));
         
-        super.getApplyButton().setOnMouseClicked(new ApplyHandler(super.getSpinner(), core));
-        super.getResetButton().setOnMouseClicked(new ResetHandler(core));
+        super.getApplyButton().setOnMouseClicked(new ApplyHandler(super.getSpinner(), InstanceProvider.getCoreOffsetController()));
+        super.getResetButton().setOnMouseClicked(new ResetHandler(InstanceProvider.getCoreOffsetController()));
         
     }
     public Integer getSpinnerValue()

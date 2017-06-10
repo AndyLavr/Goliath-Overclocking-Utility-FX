@@ -37,7 +37,7 @@ public class FanProfileEditPane extends VBox
         super();
 
         profile = file;
-        tempCol = new TableColumn<>("Tempature(C)");
+        tempCol = new TableColumn<>("Temperature(C)");
         tempCol.setCellValueFactory(new PropertyValueFactory("temp"));
         tempCol.setSortable(true);
         tempCol.setSortType(TableColumn.SortType.ASCENDING);
@@ -65,7 +65,7 @@ public class FanProfileEditPane extends VBox
         speedBox.getStyleClass().add("hbox");
         speedBox.setSpacing(5);
         
-        tempLabel = new Label("Tempature(C):");
+        tempLabel = new Label("Temperature(C):");
         speedLabel = new Label("Speed(%):");
         
         tempSpinner = new Spinner<>();

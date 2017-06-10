@@ -9,7 +9,7 @@ import javafx.scene.control.MenuItem;
 
 public class ProfileContextMenu extends ContextMenu
 {
-    private ListView<FanProfile> list;
+    private final ListView<FanProfile> list;
     
     public ProfileContextMenu(ListView<FanProfile> current)
     {

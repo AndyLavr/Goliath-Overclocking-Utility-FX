@@ -1,7 +1,6 @@
 package goliathoufx.panes.performance.powermizer;
 
-import goliath.ou.controller.PowerMizerController;
-import goliath.ou.interfaces.GPUController;
+import goliathoufx.InstanceProvider;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -14,7 +13,7 @@ public class PerformanceModePane extends HBox
 {
     private final ComboBox<String> modes;
     
-    public PerformanceModePane(PowerMizerController powerMizer)
+    public PerformanceModePane()
     {
         super();
         super.getStyleClass().add("hbox");
@@ -22,35 +21,28 @@ public class PerformanceModePane extends HBox
         super.setSpacing(5);
         
         modes = new ComboBox<>(FXCollections.observableArrayList("Adaptive", "Max Performance", "Driver Controlled(Auto)"));
-        modes.getSelectionModel().select(powerMizer.getCurrentValue());
-        modes.getSelectionModel().selectedItemProperty().addListener(new ModeHandler(powerMizer));
+        modes.getSelectionModel().select(InstanceProvider.getPowerMizerController().getCurrentValue());
+        modes.getSelectionModel().selectedItemProperty().addListener(new ModeHandler());
         
         super.getChildren().addAll(new Label("Performance Mode:"), modes);
     }
     private class ModeHandler implements ChangeListener<String>
     {
-        private final GPUController<Integer> cont;
-        
-        public ModeHandler(PowerMizerController powerMizer)
-        {
-            cont = powerMizer;
-        }
-        
         @Override
         public void changed(ObservableValue observable, String oldValue, String newValue)
         {
             switch(newValue)
             {
                 case "Adaptive":
-                    cont.setValue(0);
+                    InstanceProvider.getPowerMizerController().setValue(0);
                     break;
                     
                 case "Max Performance":
-                    cont.setValue(1);
+                    InstanceProvider.getPowerMizerController().setValue(1);
                     break;
                 
                 case "Driver Controlled(Auto)":
-                    cont.setValue(2);
+                    InstanceProvider.getPowerMizerController().setValue(2);
                     break;
             }
         } 
