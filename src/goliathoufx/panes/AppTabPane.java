@@ -21,7 +21,7 @@ public class AppTabPane extends TabPane
         super.setTabClosingPolicy(TabClosingPolicy.ALL_TABS);
           
         ConsolePane pane = new ConsolePane();
-        ConsolePane.initPane(pane);
+        ConsolePane.init(pane.getList());
         
         BLOCK_TAB_CREATION = false;
         passwordPane = new PasswordPane(this);

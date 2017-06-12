@@ -54,10 +54,17 @@ public class InstanceProvider
     
     public static void init()
     {
-        // SINGLETON
-        perfLevels = new PerfLevelParser().beginParse();
-        initAttributes(APPDIR.getAttributesDirectory());
         CsvReader settingsReader;
+        
+        // SINGLETON
+        
+        PerfLevelParser perfParser = new PerfLevelParser();
+        perfParser.beginParse();
+        
+        perfLevels = perfParser.getPerformanceLevels();
+        
+        initAttributes(APPDIR.getAttributesDirectory());
+       
         try
         {
             settingsReader = new CsvReader(APPDIR.getAppConfig());
@@ -78,7 +85,7 @@ public class InstanceProvider
         AttributeExporter exporter = new AttributeExporter(attrDir);
 
         if (attrDir.listFiles().length == 0) // create and export
-        {
+        {       
             newAttributes.add(new Attribute("GPUCurrentCoreVoltage", "Current Voltage", "mV", true, true));
             newAttributes.add(new Attribute("NvidiaDriverVersion", "Driver Version", null, true, false));
             newAttributes.add(new Attribute("RefreshRate", "Display Refresh Rate", null, true, false));
@@ -106,7 +113,7 @@ public class InstanceProvider
             for (int i = 0; i < newAttributes.size(); i++)
                 exporter.exportObject(newAttributes.get(i));
         }
-        
+       
         files = attrDir.listFiles();
 
         for(int i = 0; i < files.length; i++)

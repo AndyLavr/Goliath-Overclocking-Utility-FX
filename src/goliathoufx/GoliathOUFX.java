@@ -13,7 +13,7 @@ public class GoliathOUFX extends Application
     public static void main(String[] args) throws IOException
     {   
         InstanceProvider.init();
-
+        
         launch(args);
     }
 
@@ -21,7 +21,6 @@ public class GoliathOUFX extends Application
     public void start(Stage stage) throws Exception
     {
         scene = new Scene(new AppFrame(stage));
-        
         scene.getStylesheets().add("skins/Goliath-Numix.css");
         
         stage.setTitle("Goliath Overclocking Utility V" + AppSettings.getVersion());

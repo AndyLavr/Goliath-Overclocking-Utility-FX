@@ -5,18 +5,10 @@
  */
 package goliathoufx.panes;
 
-import goliath.ou.interfaces.GPUController;
-import goliath.ou.attribute.Attribute;
-import goliath.ou.controller.CoreOffsetController;
-import goliath.ou.controller.MemoryOffsetController;
 import goliath.ou.controller.PowerLimitController;
-import goliath.ou.controller.PowerMizerController;
-import goliath.ou.controller.VoltageOffsetController;
-import goliath.ou.performance.PerformanceLevel;
 import goliathoufx.InstanceProvider;
 import goliathoufx.panes.performance.OverclockingTabPane;
 import goliathoufx.panes.performance.PowerMizerPane;
-import java.util.ArrayList;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -73,7 +65,7 @@ public class PerformancePane extends BorderPane
                 InstanceProvider.getPowerLimitController().setValue(overclockingTabPane.getPowerSpinner().getValue());
             }
             
-            ConsolePane.addText("\nApplying all Overclocks...");
+            ConsolePane.addText("Applying all Overclocks...");
             ConsolePane.addText(InstanceProvider.getCoreOffsetController().getOutput());
             ConsolePane.addText(InstanceProvider.getMemoryOffsetController().getOutput());
             ConsolePane.addText(InstanceProvider.getVoltageOffsetController().getOutput()); 
@@ -81,7 +73,7 @@ public class PerformancePane extends BorderPane
             if(InstanceProvider.getPowerLimitController().isWorking())
                 ConsolePane.addText(InstanceProvider.getPowerLimitController().getOutput());
             
-            ConsolePane.addText("\nOverclocks Applied.");
+            ConsolePane.addText("Overclocks Applied.");
     }
     public void applyPowerLimit(CharSequence password)
     {            
@@ -115,11 +107,11 @@ public class PerformancePane extends BorderPane
             InstanceProvider.getMemoryOffsetController().setValue(0);
             InstanceProvider.getVoltageOffsetController().setValue(0);
             
-            ConsolePane.addText("\nResetting Overclocks...");
+            ConsolePane.addText("Resetting Overclocks...");
             ConsolePane.addText(InstanceProvider.getCoreOffsetController().getOutput());
             ConsolePane.addText(InstanceProvider.getMemoryOffsetController().getOutput());
             ConsolePane.addText(InstanceProvider.getVoltageOffsetController().getOutput()); 
-            ConsolePane.addText("\nOverclocks reset. Power Limit must be reset manually.");
+            ConsolePane.addText("Overclocks reset. Power Limit must be reset manually.");
         }
     }
 }

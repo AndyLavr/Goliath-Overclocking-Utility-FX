@@ -189,6 +189,10 @@
 {
 	-fx-background-color: #2E2E2E;
 }
+.label
+{
+    -fx-text-fill: #D2D2D2;
+}
 .cell
 {
 	-fx-background-color: #2E2E2E;

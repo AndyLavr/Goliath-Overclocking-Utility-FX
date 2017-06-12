@@ -82,6 +82,7 @@ public class TitlePane extends HBox
         @Override
         public void handle(MouseEvent event)
         {
+            InstanceProvider.getFanModeController().reset();
             Platform.exit();
             System.exit(0);
         }

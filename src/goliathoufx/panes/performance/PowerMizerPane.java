@@ -5,11 +5,9 @@
  */
 package goliathoufx.panes.performance;
 
-import goliath.ou.controller.PowerMizerController;
 import goliath.ou.performance.PerformanceLevel;
 import goliathoufx.InstanceProvider;
 import goliathoufx.panes.performance.powermizer.PerformanceModePane;
-import java.util.ArrayList;
 import javafx.collections.FXCollections;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;

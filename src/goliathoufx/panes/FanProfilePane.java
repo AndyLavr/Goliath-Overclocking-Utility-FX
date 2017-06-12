@@ -1,14 +1,13 @@
 package goliathoufx.panes;
 
-import goliath.ou.attribute.Attribute;
 import goliath.ou.controller.FanModeController;
 import goliath.ou.controller.FanSpeedController;
 import goliath.ou.fan.FanManager;
 import goliath.ou.fan.FanProfile;
 import goliath.ou.fan.FanProfileImporter;
 import goliath.ou.utility.GoliathThread;
-import goliathoufx.GoliathOUFX;
 import goliathoufx.InstanceProvider;
+import goliathoufx.panes.fan.FanInfoPane;
 import goliathoufx.panes.fan.FanProfileEditPane;
 import goliathoufx.panes.fan.ProfileContextMenu;
 import java.util.logging.Level;
@@ -21,10 +20,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
-public class FanProfilePane extends HBox
+public class FanProfilePane extends BorderPane
 {
     private final FanProfileEditPane editPane;
     private final ListView<FanProfile> profileList;
@@ -71,7 +70,9 @@ public class FanProfilePane extends HBox
         
         leftPane.getChildren().addAll(profileList, applyButton);
         
-        super.getChildren().addAll(leftPane, editPane);
+        super.setTop(new FanInfoPane());
+        super.setLeft(leftPane);
+        super.setCenter(editPane);
     }
     public void updateFan()
     {
